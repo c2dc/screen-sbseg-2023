@@ -1,5 +1,4 @@
 # screen-sbseg-2023
-=========
 
 Este repositório contém o código para nosso protótipo de implementação da metodologia utilizada em nosso artigo SBSeg 2023.
 
