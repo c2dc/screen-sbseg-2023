@@ -19,8 +19,8 @@ A metodologia é divida em 5 fases.
 2. Realiza a extração dos firmwares em pastas separadas por fabricante, para posterior envio ao github a fim de análise do código-fonte pelo SEMGREP. Os indícios de vulnerabilidades do SEMGREP serão utilizados para criação de templates. (Parte dessa fase é manual)
 3. Os dados provenientes da NVD API serão inserido na pasta YYYY para posterior criação de templates. (Parte dessa fase é manual)
 4. Nesta fase os firmwares emuláveis serão iniciados em paralelo.
-5. Análise de vulnerabilidade
-6. 
+5. Análise de vulnerabilidade com o Nuclei e os temaplates.
+   
 ## Fase 0 - Downloading e Instalação
 
 Para executar o protótipo é necessário realizar o download e instalação do framework FirmAE e configurar a imagem docker responsável pela emulação e análise em larga escala. Para fazer isso nós executamos o script abaixo.
@@ -47,7 +47,7 @@ Realiza a extração dos firmwares em pastas separadas por fabricante, para post
 
 ## Fase 3 - Requisição a API NVD para criação de templates
 
-Utiliza informações do firmware ou do seu fabricante para gerar templates com  dados provenientes da NVD API com dados relacionados a vulnerabildiades anteriomente reportadas. (Essa é uma subfase manual). Para fazer isso nós executamos o script abaixo.
+Utiliza informações do firmware ou do seu fabricante para gerar templates com  dados provenientes da NVD API com dados relacionados a vulnerabilidades anteriomente reportadas. (Essa é uma subfase manual). Para fazer isso nós executamos o script abaixo.
 
 ```
 ./api_request.sh
@@ -55,7 +55,7 @@ Utiliza informações do firmware ou do seu fabricante para gerar templates com 
 
 ## Fase 4 - Emulação em escala
 
-Nesta fase os firmwares emuláveis serão iniciados em paralelo atarvés de containers via Docker.Para fazer isso nós executamos o script abaixo.
+Nesta fase os firmwares emuláveis serão iniciados em paralelo através de containers via Docker. Para fazer isso nós executamos o script abaixo.
 
 ```
 ./emulation.sh
@@ -63,8 +63,7 @@ Nesta fase os firmwares emuláveis serão iniciados em paralelo atarvés de cont
 
 ## Fase 5 - Análise de vulnerabilidade
 
-Realiza a execução em cada docker um processo do Nuclei utilziando a base de dados de templates. Para fazer isso nós executamos o script abaixo.
-
+Realiza a execução, em cada container, um processo do Nuclei utilizando a base de dados de templates. Para fazer isso nós executamos o script abaixo.
 ```
 ./run_vuln_check.sh
 ``` 
