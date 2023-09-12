@@ -1,6 +1,10 @@
 # screen-sbseg-2023
 
-Este repositório contém o código para implementação da metodologia apresentado em nosso artigo no SBSeg 2023
+Este repositório contém o código para implementação da metodologia apresentado em nosso artigo no SBSeg 2023 
+
+[BAIXAR PAPER](https://github.com/c2dc/screen-sbseg-2023/blob/b2ca370d1ef426fa157b7a8d055f7a333ab3a99b/paper_sbseg2023.pdf)
+
+[BAIXAR SLIDES](XXX)
 
 Nossa metodologia é uma abordagem semiautomática capaz de auxiliar na descoberta de vulnerabilidades na interface web por meio da análise dinâmica de roteadores sem-fio em larga escala. A contribuição proposta pelo artigo é a integração da capacidade de emulação de imagens de firmware de roteadores em larga escala por meio do framework FirmAE com a análise de vulnerabilidades usando a técnica de web-fuzzing com templates da ferramenta Nuclei. Além disso, outra contribuição consiste na criação de templates específicos para o contexto de roteadores sem-fio a partir da análise de código-fonte e de vulnerabilidades conhecidas. Além da Metodologia em si, outra contribuição inicial são os templates destinados à ferramenta Nuclei. Esses modelos, construídos com base em Yet Another Markup Language (YAML), têm a finalidade de estabelecer os procedimentos para o envio e processamento das requisições HTTP.
 
