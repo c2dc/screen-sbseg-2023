@@ -1,40 +1,41 @@
-import json
+
 import requests
-import sys
 
-def get_exploit_urls(data):
-    exploit_urls = []
-    vulnerabilities = data.get("vulnerabilities", [])
-    for vulnerability in vulnerabilities:
-        references = vulnerability.get("references", [])
-        for reference in references:
+def fetch_vulnerabilities(api_key, search_keyword):
+    url = f"https://services.nvd.nist.gov/rest/json/cves/2.0?keywordSearch={search_keyword}"
+    headers = {'apiKey': api_key}
+    response = requests.get(url, headers=headers)
+    if response.status_code == 200:
+        return response.json()
+    else:
+        print(f"Erro ao buscar dados: {response.status_code}")
+        return None
+
+def extract_cve_id_and_exploit_url(data):
+    cve_exploit_info = []
+    for vulnerability in data.get("vulnerabilities", []):
+        cve_id = vulnerability["cve"]["id"]
+        for reference in vulnerability["cve"].get("references", []):
             if "Exploit" in reference.get("tags", []):
-                exploit_urls.append(reference["url"])
-    return exploit_urls
+                exploit_url = reference.get("url")
+                cve_exploit_info.append((cve_id, exploit_url))
+    return cve_exploit_info
 
-if len(sys.argv) < 2:
-    print("Por favor, forneça o ID CVE como argumento.")
-    sys.exit(1)
+def save_to_file(vulnerabilities, filename):
+    with open(filename, 'w') as file:
+        for cve, url in vulnerabilities:
+            file.write(f"{cve}, {url}\n")
 
-cve_id = sys.argv[1]
+# Configurações
+API_KEY = '03c11277-327c-451e-921a-7f78018c336d'  # Substitua com sua chave de API real
+SEARCH_KEYWORD = 'D-LINK'
+OUTPUT_FILE = 'vulnerabilities.csv'
 
-# Etapa 1: Fazer uma requisição HTTP para obter o JSON
-url = f"https://services.nvd.nist.gov/rest/json/cves/2.0?cveId={cve_id}"
-response = requests.get(url)
-data = response.json()
-
-# Etapa 2: Analisar o JSON e extrair a URL
-exploit_urls = get_exploit_urls(data)
-
-# Etapa 3: Fazer uma requisição HTTP para a URL extraída
-for url in exploit_urls:
-    response = requests.get(url)
-    # Aqui você pode salvar o conteúdo da resposta ou fazer o que precisar com ele
-    # Por exemplo, para salvar o conteúdo em um arquivo:
-    with open(f"exploit_content_{cve_id}.txt", "a") as file:
-        file.write(response.text)
-
-# Etapa 4: Imprimir uma mensagem para o operador
-print("Operador, analise o exploit e transforme-o em template.")
-
-
+# Execução do Script
+data = fetch_vulnerabilities(API_KEY, SEARCH_KEYWORD)
+if data:
+    vulnerabilities = extract_cve_id_and_exploit_url(data)
+    save_to_file(vulnerabilities, OUTPUT_FILE)
+    print(f"Arquivo '{OUTPUT_FILE}' criado com sucesso.")
+else:
+    print("Falha ao obter dados.")
